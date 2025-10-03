@@ -29,7 +29,6 @@ We experiment with:
 | Food groups (M)   | 	Nutrition | Vegetables without potatoes  during pregnancy,Fruits during pregnancy. etcc|
 | Suprailiac skinfold   | Suprailiac skinfold | NaN |
 
-
 ---
 
 ### 2. `Labeled_variables_with_llm_enrichment.csv`
@@ -45,7 +44,7 @@ We experiment with:
 |-------------------|-------------------|---------------------------------------------------------------|------------------------------------|
 | Pregnancy number  | Identifiers | Pregnancy number is an information content entity that is the outcome of a dubbing process and is used to refer to one instance of entity shared by a group of people to refer to that individual entity             | pregnancy count, gravidity         |
 | Food groups (M)   | 	Nutrition | Nutritional history is a lifestyle history that is about the diet and nutrition of an individual       | dietary categories, nutrition sets |
-
+| Suprailiac skinfold   | Suprailiac skinfold | Suprailiac skinfold is a morphological measurement of the skin fold| |
 ---
 
 ### 3. `parent_gecko_candidates_top5.xlsx`
