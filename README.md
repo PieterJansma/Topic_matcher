@@ -82,17 +82,18 @@ Candidates were generated using our **best-performing embedding model** (explain
   - `parent` – the parent category from our dataset.  
   - `parent_definition` – enriched definition for the parent (LLM-generated when available).  
   - `gecko_label` – candidate GECKO ontology label.  
-  - `gecko_definition` – definition from the GECKO ontology.  
+  - `gecko_text` – definition from the GECKO ontology.  
   - `sim` – cosine similarity score between parent text and GECKO text.  
   - `auto_suggest` – automatically flagged if similarity ≥ threshold.  
   - `approved` – manual selection (`TRUE` if chosen as the best match).
 
 **Example:**
 
-| parent                | gecko_label     | gecko_definition                                     | sim  | approved |
+| parent                | gecko_label     | gecko_text                                    | sim  | approved |
 |-----------------------|-----------------|------------------------------------------------------|------|----------|
-| Pregnancy history     | Gravidity       | The number of times a female has been pregnant.      | 0.87 | TRUE     |
-| Diet during pregnancy | Food intake     | The consumption of food and drink by an organism.    | 0.82 | TRUE     |
+| identifier     | identifier      | An identifier is an information content entity that is the outcome of a dubbing process and is used to refer to one instance of entity shared by a group of people to refer to that individual entity.   | 0.87 | TRUE     |
+| Cognitive domains | Cognitive domains
+     | A psychological measurement of some aspect of intellectual functions such as memory, problem solving, and comprehension.   | 0.83 | TRUE     |
 
 
 ---
