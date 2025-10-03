@@ -67,18 +67,33 @@ To improve coverage of missing or too-short definitions, we used **LLMs to auto-
 
 
 ### 3. `parent_gecko_candidates_top5.xlsx`
-- **Description**: Top-5 candidate GECKO ontology classes per parent (based on embedding similarity).  
-- **Columns**:  
-  - `parent`, `parent_definition`, `gecko_label`, `gecko_definition`, `sim` (cosine similarity), `auto_suggest`.  
-  - `approved`: manual selection (`TRUE` if correct match).  
+
+This file contains the **top-5 candidate GECKO ontology classes** for each of the 89 parent categories.  
+Candidates were generated using our **best-performing embedding model** (explained in the Results section).
+
+- **Process**
+  - For each parent, the model produced 5 candidate GECKO classes ranked by cosine similarity.  
+  - A **human annotator** reviewed the candidates and selected the most appropriate match.  
+  - In some cases, none of the 5 options were a perfect fit — the annotator then chose the *closest* class.  
+  - Because of the difficulty of the task, not all matches are 100% correct.  
+  - The goal was primarily to **enrich the dataset with additional ontology context** (labels + definitions), rather than to create a flawless gold standard.
+
+- **Columns**
+  - `parent` – the parent category from our dataset.  
+  - `parent_definition` – enriched definition for the parent (LLM-generated when available).  
+  - `gecko_label` – candidate GECKO ontology label.  
+  - `gecko_definition` – definition from the GECKO ontology.  
+  - `sim` – cosine similarity score between parent text and GECKO text.  
+  - `auto_suggest` – automatically flagged if similarity ≥ threshold.  
+  - `approved` – manual selection (`TRUE` if chosen as the best match).
 
 **Example:**
-| parent              | gecko_label     | gecko_definition                            | sim  | approved |
-|---------------------|-----------------|---------------------------------------------|------|----------|
-| Pregnancy history   | Gravidity       | *The number of times a female has been pregnant.* | 0.87 | TRUE     |
-| Diet during pregnancy | Food intake   | *The consumption of food and drink by an organism.* | 0.82 | TRUE |
 
----
+| parent                | gecko_label     | gecko_definition                                     | sim  | approved |
+|-----------------------|-----------------|------------------------------------------------------|------|----------|
+| Pregnancy history     | Gravidity       | The number of times a female has been pregnant.      | 0.87 | TRUE     |
+| Diet during pregnancy | Food intake     | The consumption of food and drink by an organism.    | 0.82 | TRUE     |
+
 
 ---
 
