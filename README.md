@@ -2,7 +2,7 @@
 
 # GECKO Variable Mapping Experiments
 
-This repository contains experiments for **mapping survey/variable names** to **GECKO ontology classes**, exploring how different text enrichment and embedding strategies affect performance.
+This repository contains experiments for **mapping variable names** to **topics** also exploring existing **Gecko Ontology**, exploring how different text enrichment and embedding strategies affect performance.
 
 We experiment with:
 - raw labeled data,
@@ -25,8 +25,10 @@ We experiment with:
 **Example:**
 | name              | parent              | definition |
 |-------------------|---------------------|------------|
-| Pregnancy number  | Pregnancy history   | *NA*       |
-| Food groups (M)   | Diet during pregnancy | *NA*    |
+| Pregnancy number  | Identifiers         | Pregnancy number      |
+| Food groups (M)   | Diet during pregnancy | Vegetables without potatoes  during pregnancy,Fruits during pregnancy. etcc|
+| Suprailiac skinfold   | Suprailiac skinfold | NaN |
+
 
 ---
 
