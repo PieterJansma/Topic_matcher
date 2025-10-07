@@ -1,0 +1,586 @@
+{
+  "Administrative information": [
+    "org details",
+    "management data",
+    "office info",
+    "operational data",
+    "staff records"
+  ],
+  "Air pollution": [
+    "pollution air",
+    "air contaminants",
+    "atmospheric pollution",
+    "air quality issues",
+    "airborne pollutants"
+  ],
+  "Allergic sensitization": [
+    "allergy response",
+    "immune sensitivity",
+    "hypersensitivity",
+    "sensitization",
+    "immune activation"
+  ],
+  "Allergy": [
+    "allergic reaction",
+    "hypersensitivity",
+    "immune response",
+    "allergen response",
+    "sensitivity"
+  ],
+  "Anthropometry": [
+    "body measures",
+    "human size",
+    "physical dimensions",
+    "body data",
+    "size metrics"
+  ],
+  "Behavioral problem domains": [
+    "behavioral issues",
+    "conduct problems",
+    "problem behaviors",
+    "behavioral traits",
+    "disruptive actions"
+  ],
+  "Birth outcomes": [
+    "delivery results",
+    "pregnancy outcomes",
+    "newborn outcomes",
+    "live birth data",
+    "fetal outcomes"
+  ],
+  "Birth, pregnancy and reproductive health history": [
+    "reproductive history",
+    "pregnancy history",
+    "birth history",
+    "fertility history",
+    "health history"
+  ],
+  "Birthplace": [
+    "origin",
+    "place of birth",
+    "native place",
+    "birth location",
+    "home town"
+  ],
+  "Built environment/neighbourhood characteristics": [
+    "environmental context",
+    "neighbourhood traits",
+    "urban features",
+    "local setting",
+    "area attributes"
+  ],
+  "Chemical exposure": [
+    "Toxic contact",
+    "Substance exposure",
+    "Chemical contact",
+    "Exposure risk",
+    "Hazard exposure"
+  ],
+  "Chemicals": [
+    "Substances",
+    "Compounds",
+    "Molecules",
+    "Agents",
+    "Materials"
+  ],
+  "Child asthma": [
+    "asthma",
+    "asthma condition",
+    "respiratory asthma",
+    "chronic asthma",
+    "asthma disorder"
+  ],
+  "Child's height": [
+    "height measurement",
+    "child stature",
+    "growth height",
+    "height status",
+    "development height"
+  ],
+  "Circumferences": [
+    "[\"perimeters\" \"boundaries\" \"edges\" \"len…"
+  ],
+  "Cognition, personality and psychological measures and assessments": [
+    "mental traits",
+    "psychological traits",
+    "behavioral measures",
+    "cognitive traits",
+    "personality tests"
+  ],
+  "Cognitive domains": [
+    "thinking skills",
+    "mental processes",
+    "cognitive functions",
+    "brain activities",
+    "mental abilities"
+  ],
+  "Cognitive functioning": [
+    "mental ability",
+    "brain function",
+    "thinking skills",
+    "cognitive skills",
+    "mental performance"
+  ],
+  "Death": [
+    "End",
+    "Passing",
+    "Dying",
+    "Final",
+    "Cease"
+  ],
+  "Diseases": [
+    "illnesses",
+    "conditions",
+    "disorders",
+    "affections",
+    "pathologies"
+  ],
+  "Diseases of the respiratory system (J00-J99)": [
+    "respiratory illnesses",
+    "lung disorders",
+    "breathing conditions",
+    "airway diseases",
+    "infections of lungs"
+  ],
+  "Diseases of the skin and subcutaneous tissue (L00-L99)": [
+    "skin disorders",
+    "cutaneous diseases",
+    "skin conditions",
+    "surface infections",
+    "dermatological issues"
+  ],
+  "Education": [
+    "Learning",
+    "Schooling",
+    "Studies",
+    "Academics",
+    "Training"
+  ],
+  "Endocrine, nutritional and metabolic diseases (E00-E90)": [
+    "metabolic disorders",
+    "hormone related",
+    "nutritional conditions",
+    "endocrine diseases",
+    "metabolic diseases"
+  ],
+  "Ethnicity, race and religion": [
+    "background",
+    "identity",
+    "culture",
+    "origin",
+    "beliefs"
+  ],
+  "Family and household structure": [
+    "household types",
+    "family units",
+    "living arrangements",
+    "family structure",
+    "home units"
+  ],
+  "FEF25": [
+    "FEF25 variant",
+    "FEF25 gene",
+    "FEF25 protein",
+    "FEF25 family",
+    "FEF25 locus"
+  ],
+  "FEF50": [
+    "fe50",
+    "fifth",
+    "fe50a",
+    "fe50b"
+  ],
+  "FEF75": [
+    "FEF75 variant",
+    "FEF75 type",
+    "FEF75 class",
+    "FEF75 group",
+    "FEF75 form"
+  ],
+  "FEV1": [
+    "forced expiratory volume",
+    "expiratory volume",
+    "breath flow",
+    "lung function",
+    "flow rate"
+  ],
+  "FEV1/FVC": [
+    "flow ratio",
+    "spirometry ratio",
+    "lung function",
+    "breath flow",
+    "ventilation ratio"
+  ],
+  "Food": [
+    "Edible",
+    "Dish",
+    "Meal",
+    "Snack",
+    "Ingredient"
+  ],
+  "Food_IgE": [
+    "Food_allergy",
+    "IgE_food",
+    "allergy_food",
+    "food_reactivity",
+    "IgE_food_response"
+  ],
+  "Food_Skin prick test": [
+    "Prick test food",
+    "Food allergy test",
+    "Skin food test",
+    "Allergy skin test",
+    "Food skin reaction"
+  ],
+  "FVC": [
+    "forced vital capacity",
+    "lung volume",
+    "breath hold",
+    "expiratory volume",
+    "air volume"
+  ],
+  "Health and community care services utilization": [
+    "Health services use",
+    "Community care access",
+    "Care service access",
+    "Health service access",
+    "Community health use"
+  ],
+  "Health-related characteristics": [
+    "Health traits",
+    "Medical features",
+    "Wellness factors",
+    "Biological markers",
+    "Physical conditions"
+  ],
+  "Identifiers": [
+    "codes",
+    "tags",
+    "keys",
+    "labels",
+    "markers"
+  ],
+  "IgE (Food)": [
+    "Food IgE",
+    "IgE food",
+    "Food allergy",
+    "E allergic",
+    "Allergy IgE"
+  ],
+  "IgE (Inhalant)": [
+    "inhalant ige",
+    "ige inhalants",
+    "ige allergens",
+    "inhalation ige",
+    "ige triggers"
+  ],
+  "Income, possessions, and benefits": [
+    "Wealth indicators",
+    "Financial status",
+    "Asset levels",
+    "Economic resources",
+    "Material goods"
+  ],
+  "Inhalant": [
+    "[\"inhalation\" \"smoke\" \"vapor\" \"gas\" \"fu…"
+  ],
+  "Inhalant_IgE": [
+    "Inhalant_allergy",
+    "Airborne_IgE",
+    "Breath_IgE",
+    "Inhaled_IgE"
+  ],
+  "Inhalant_Skin prick test": [
+    "Skin test",
+    "Prick test",
+    "Inhalant exposure",
+    "Allergy test",
+    "Skin reaction"
+  ],
+  "Laboratory measures": [
+    "lab tests",
+    "clinical assays",
+    "diagnostic tests",
+    "biological markers",
+    "lab values"
+  ],
+  "Labour force and retirement": [
+    "retirement and work",
+    "work and aging",
+    "employment at retirement",
+    "retirement transition",
+    "aging workforce"
+  ],
+  "Life events, life plans, beliefs and values": [
+    "personal beliefs",
+    "life goals",
+    "core values",
+    "life stages",
+    "meaning systems"
+  ],
+  "Lifestyle and behaviours": [
+    "Daily habits",
+    "Living style",
+    "Behavioral patterns",
+    "Personal routines",
+    "Way of life"
+  ],
+  "Lung function": [
+    "respiratory function",
+    "lung capacity",
+    "breathing function",
+    "pulmonary function",
+    "airflow function"
+  ],
+  "Maternal psychiatric disorders": [
+    "maternal mental health",
+    "motherhood mental issues",
+    "maternal mental illness",
+    "psychiatric conditions in pregnancy",
+    "mental disorders during parenting"
+  ],
+  "Medication and supplements": [
+    "drugs",
+    "treatments",
+    "remedies",
+    "health aids",
+    "supps"
+  ],
+  "Mental and behavioural disorders (F00-F99)": [
+    "mental disorders",
+    "behavioural conditions",
+    "psychiatric disorders",
+    "mental health conditions",
+    "psychological disorders"
+  ],
+  "Meteorology": [
+    "weather science",
+    "atmospheric studies",
+    "climate analysis",
+    "weather patterns",
+    "atmospheric conditions"
+  ],
+  "Natural spaces": [
+    "wild areas",
+    "outdoor zones",
+    "natural zones",
+    "green spaces",
+    "wild lands"
+  ],
+  "Noise": [
+    "disturbance",
+    "interference",
+    "static",
+    "hazard",
+    "disruption"
+  ],
+  "Non-pharmacological interventions": [
+    "behavioral therapies",
+    "lifestyle changes",
+    "psychosocial approaches",
+    "natural remedies",
+    "active strategies"
+  ],
+  "Nutrition": [
+    "Diet",
+    "Food intake",
+    "Nutrients",
+    "Eating habits",
+    "Health food"
+  ],
+  "Other administrative information": [
+    "additional details",
+    "supplementary data",
+    "administrative notes",
+    "supporting info",
+    "extra context"
+  ],
+  "Other physical environment characteristics": [
+    "environmental factors",
+    "physical conditions",
+    "natural settings",
+    "geographic traits",
+    "site features"
+  ],
+  "Other psychological measures and assessments": [
+    "psychological tests",
+    "mental evaluations",
+    "behavioral scales",
+    "cognitive screens",
+    "emotional assessments"
+  ],
+  "Other social environment characteristics": [
+    "social context",
+    "community factors",
+    "social setting",
+    "environmental influences",
+    "social conditions"
+  ],
+  "Perception of health, quality of life, development and functional limitations": [
+    "health outlook",
+    "wellness status",
+    "life function",
+    "daily ability",
+    "quality feel"
+  ],
+  "Pets": [
+    "Animals",
+    "Companions",
+    "Livestock",
+    "Furry friends",
+    "House pets"
+  ],
+  "Physical and cognitive measure and biosample-related information": [
+    "biological data",
+    "health metrics",
+    "physical traits",
+    "cognitive data",
+    "sample info"
+  ],
+  "Physical environment": [
+    "natural setting",
+    "environmental context",
+    "physical world",
+    "natural world",
+    "geographic setting"
+  ],
+  "Physical measures and assessments": [
+    "physical metrics",
+    "body measurements",
+    "clinical tests",
+    "anatomical data",
+    "biological signs"
+  ],
+  "Pregnancy, delivery and birth": [
+    "pregnancy care",
+    "childbirth process",
+    "delivery events",
+    "maternal birth",
+    "pregnancy outcomes"
+  ],
+  "Preschool age": [
+    "[\"young children\" \"age 3-5\" \"toddler ye…"
+  ],
+  "Preschool life": [
+    "early childhood",
+    "toddler years",
+    "kids home life",
+    "young learning",
+    "playtime routine"
+  ],
+  "Preschool, school and work life": [
+    "early education",
+    "childhood learning",
+    "educational stages",
+    "learning phases",
+    "education lifecycle"
+  ],
+  "Respiratory (Adult health)": [
+    "Breathing disorders",
+    "Lungs health",
+    "Respiratory conditions",
+    "Airway diseases",
+    "Breath health"
+  ],
+  "Respiratory tract infections": [
+    "respiratory infections",
+    "airway infections",
+    "lung infections",
+    "breathing infections",
+    "infectious respiratory"
+  ],
+  "School age": [
+    "[\"childhood\"]",
+    "[\"youth\"]",
+    "[\"toddler\"]",
+    "[\"preadolescent\"]",
+    "[\"early teen\"]"
+  ],
+  "Skin prick test (Food)": [
+    "food prick test",
+    "prick test food",
+    "food allergy test",
+    "prick test",
+    "allergy skin test"
+  ],
+  "Skin prick test (Inhalant)": [
+    "inhalant skin test",
+    "skin inhalant test",
+    "prick inhalant",
+    "inhalant prick",
+    "skin prick inh"
+  ],
+  "Skinfold": [
+    "fatty layer",
+    "skin fat",
+    "subcutaneous",
+    "body fat",
+    "fat thickness"
+  ],
+  "Social context": [
+    "social setting",
+    "community environment",
+    "interpersonal dynamics",
+    "group behavior",
+    "cultural context"
+  ],
+  "Social environment and relationships": [
+    "relationships",
+    "social ties",
+    "peer interactions",
+    "community bonds",
+    "human connections"
+  ],
+  "Socio-demographic and economic characteristics": [
+    "demographic traits",
+    "economic factors",
+    "social profile",
+    "population traits",
+    "socioeconomic status"
+  ],
+  "Spirometry": [
+    "lung function",
+    "breath test",
+    "airflow measurement",
+    "pulmonary test",
+    "flow volume"
+  ],
+  "Symptoms and signs": [
+    "clinical features",
+    "manifestations",
+    "signs and symptoms",
+    "patient findings",
+    "observable traits"
+  ],
+  "Symptoms and signs involving cognition, perception, emotional state and behaviour (R40-R46)": [
+    "cognitive changes",
+    "mental symptoms",
+    "emotional shifts",
+    "behavioural signs",
+    "perceptual issues"
+  ],
+  "Tobacco": [
+    "smoke",
+    "cigar",
+    "leaf",
+    "nicotine",
+    "chew"
+  ],
+  "Traffic": [
+    "[\"Movement\" \"Flow\" \"Travel\" \"Mobility\" …"
+  ],
+  "Unhealthy food environment": [
+    "unhealthy food",
+    "poor food",
+    "toxic food",
+    "bad food",
+    "food risk"
+  ],
+  "Vital status": [
+    "alive",
+    "deceased",
+    "status",
+    "living",
+    "outcome"
+  ]
+}
