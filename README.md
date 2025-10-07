@@ -267,7 +267,7 @@ Open the script and adjust:
 
 | Sample Size | Evaluated | Skipped (no gold) | Failures | Top-1 Accuracy | Top-3 Accuracy | Seed |
 | ----------: | --------: | ----------------: | -------: | -------------: | -------------: | ---: |
-|          30 |        27 |                 3 |        0 |         48.15.47% |         70.37% |   42 |
+|          100 |        97 |                 3 |        0 |         50.52% |         75.26% |   42 |
 
 ### Examples of when model is right
 
