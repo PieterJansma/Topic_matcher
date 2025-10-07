@@ -92,8 +92,7 @@ Candidates were generated using our **best-performing embedding model** (explain
 | parent                | gecko_label     | gecko_text                                    | sim  | approved |
 |-----------------------|-----------------|------------------------------------------------------|------|----------|
 | identifier     | identifier      | An identifier is an information content entity that is the outcome of a dubbing process and is used to refer to one instance of entity shared by a group of people to refer to that individual entity.   | 0.87 | TRUE     |
-| Cognitive domains | Cognitive domains
-     | A psychological measurement of some aspect of intellectual functions such as memory, problem solving, and comprehension.   | 0.83 | TRUE     |
+| Cognitive domains | Cognitive domains| A psychological measurement of some aspect of intellectual functions such as memory, problem solving, and comprehension.   | 0.83 | TRUE|
 
 
 ---
