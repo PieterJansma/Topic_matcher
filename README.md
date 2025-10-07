@@ -19,8 +19,6 @@ Two terminal tools to help you **clean up variable definitions** and **predict t
 * [Configuration knobs](#configuration-knobs)
 * [Troubleshooting](#troubleshooting)
 * [Results & analysis templates](#results--analysis-templates)
-* [FAQ](#faq)
-* [License](#license)
 
 ---
 
@@ -294,35 +292,5 @@ Open the script and adjust:
 
 ---
 
-## FAQ
 
-**Q: Which models work best?**
-A: For speed and privacy, a **quantized 3–7B Instruct** model (e.g., Qwen, Llama-3-Instruct, Mistral-Instruct) is a good start. Larger models generally improve accuracy but require more RAM.
 
-**Q: Are the “confidence” scores probabilities?**
-A: No. They’re **model self-scores** (0–100), normalized across the Top-3. Use them as a heuristic with human review.
-
-**Q: Can I save the on-the-fly generated short definition?**
-A: In the predictor we only generate for context/display. If you want to persist them back to Excel, that can be added.
-
-**Q: Can I export predictions to a file?**
-A: Yes with a small change — e.g., add columns `pred_parent_top1/2/3`, `pred_score_top1/2/3`, `pred_why_top1/2/3`. Open an issue or adapt the script.
-
----
-
-## License
-
-MIT (or your preferred license). Add a `LICENSE` file if you plan to share publicly.
-
----
-
-### Repo layout (suggested)
-
-```
-.
-├── README.md
-├── interactive_compact_defs_all_v2.py
-└── predict_parent_interactive.py
-```
-
-That’s it — copy this README into `README.md` and you’re ready to go.
