@@ -1,173 +1,321 @@
-# Topic_matcher
+# Topic Matching – Local LLM Toolkit (Qwen + llama.cpp)
 
-# GECKO Variable Mapping Experiments
-
-This repository contains experiments for **mapping variable names** to **topics** also exploring existing **Gecko Ontology**, exploring how different text enrichment and embedding strategies affect performance.
-
-We experiment with:
-- raw labeled data,
-- LLM-enriched definitions and synonyms,
-- GECKO ontology true-matches,
-- different embedding models (general vs. biomedical),
-- and longer enriched definitions.
+Two terminal tools to help you **clean up variable definitions** and **predict taxonomy parents** — fully **offline** on your machine with a **quantized** instruction model (e.g., **Qwen3-4B-Instruct Q4_K_M**) served via `llama.cpp`.
 
 ---
 
-## Data Files
+## Table of Contents
 
-### 1. `Labeled_variables.xlsx`
-- **Description**: Manually labeled dataset of variables with their parent categories.  
-- **Columns**:  
-  - `name`: variable name (e.g., *Pregnancy number*).  
-  - `parent`: manually assigned parent category.  
-  - `definition`: optional short definition (often missing or short).  
+* [What it does](#what-it-does)
+* [Why Top-1 *and* Top-3](#why-top1-and-top3)
+* [Quickstart](#quickstart)
+* [Run the model locally (llama.cpp)](#run-the-model-locally-llamacpp)
+* [Scripts & usage](#scripts--usage)
 
-**Example:**
-| name              | parent              | definition |
-|-------------------|---------------------|------------|
-| Pregnancy number  | Identifiers         | Pregnancy number      |
-| Food groups (M)   | 	Nutrition | Vegetables without potatoes  during pregnancy,Fruits during pregnancy. etcc|
-| Suprailiac skinfold   | Suprailiac skinfold | NaN |
-
----
-
-### 2 LLM Enrichment
-
-To improve coverage of missing or too-short definitions, we used **LLMs to auto-generate enriched definitions**.
-
-- **Models used**
-  - [`google/flan-t5-large`](https://huggingface.co/google/flan-t5-large) for one-sentence definitions.
-  - Same model also tested with prompts for **longer multi-sentence definitions**.
-
-- **Prompts**
-  - **Short definition:**  
-    *"Write a concise, factual, single-sentence definition for the term between <term> tags. Use neutral scientific language."*
-  - **Longer definition (experiment):**  
-    *"Write a clear, factual 2–4 sentence definition for the term between <term> tags. Include what it measures or why it matters."*
-
-- **Process**
-  - The LLM generates a candidate definition.  
-  - We check **cosine similarity** between the variable name and definition.  
-  - If similarity ≥ threshold, the definition is accepted and stored as `definition_enriched`.  
-  - `definition_source` records whether the final value is `original` or `llm_generated`.
-
-- **Synonyms**
-  - We also tried prompts such as:  
-    *"Provide 3–6 synonyms or closely related terms for the term between <term> tags. Format: comma-separated list."*
-  - **Result:** inconsistent outputs → synonyms are logged for audit but not yet used in evaluation.  
-  - Future work: improve synonym generation and filtering.
-
-**Example (`Labeled_variables_with_llm_enrichment.csv`):**
-
-| name                | parent         | definition_enriched                                            | definition_source |
-|---------------------|----------------|----------------------------------------------------------------|------------------|
-| Pregnancy number    | Identifiers    | Pregnancy number is an information content entity that is the outcome of a dubbing process and is used to refer to one instance of entity shared by a group of people to refer to that individual entity               | llm_generated    |
-| Food groups (M)     | Nutrition      | Nutritional history is a lifestyle history that is about the diet and nutrition of an individual            | llm_generated    |
-| Suprailiac skinfold | Skinfold | Suprailiac skinfold is a morphological measurement of the skin fold.     | llm_generated    |
-
-
-### 3. `parent_gecko_candidates_top5.xlsx`
-
-This file contains the **top-5 candidate GECKO ontology classes** for each of the 89 parent categories.  
-Candidates were generated using our **best-performing embedding model** (explained in the Results section).
-
-- **Process**
-  - For each parent, the model produced 5 candidate GECKO classes ranked by cosine similarity.  
-  - A **human annotator** reviewed the candidates and selected the most appropriate match.  
-  - In some cases, none of the 5 options were a perfect fit — the annotator then chose the *closest* class.  
-  - Because of the difficulty of the task, not all matches are 100% correct.  
-  - The goal was primarily to **enrich the dataset with additional ontology context** (labels + definitions), rather than to create a flawless gold standard.
-
-- **Columns**
-  - `parent` – the parent category from our dataset.  
-  - `parent_definition` – enriched definition for the parent (LLM-generated when available).  
-  - `gecko_label` – candidate GECKO ontology label.  
-  - `gecko_text` – definition from the GECKO ontology.  
-  - `sim` – cosine similarity score between parent text and GECKO text.  
-  - `auto_suggest` – automatically flagged if similarity ≥ threshold.  
-  - `approved` – manual selection (`TRUE` if chosen as the best match).
-
-**Example:**
-
-| parent                | gecko_label     | gecko_text                                    | sim  | approved |
-|-----------------------|-----------------|------------------------------------------------------|------|----------|
-| identifier     | identifier      | An identifier is an information content entity that is the outcome of a dubbing process and is used to refer to one instance of entity shared by a group of people to refer to that individual entity.   | 0.87 | TRUE     |
-| Cognitive domains | Cognitive domains| A psychological measurement of some aspect of intellectual functions such as memory, problem solving, and comprehension.   | 0.83 | TRUE|
-
+  * [A) Create compact definitions](#a-create-compact-definitions)
+  * [B) Predict parents, explain, and evaluate](#b-predict-parents-explain-and-evaluate)
+* [Input/Output formats](#inputoutput-formats)
+* [How it works (under the hood)](#how-it-works-under-the-hood)
+* [Configuration knobs](#configuration-knobs)
+* [Troubleshooting](#troubleshooting)
+* [Results & analysis templates](#results--analysis-templates)
+* [FAQ](#faq)
+* [License](#license)
 
 ---
 
-## 🧪 Experimental Strategies
+## What it does
 
-We evaluated progressively richer strategies for text representation:
+1. **Compacts messy definitions**
+   Reads `Labeled_variables.xlsx` with columns `name`, `parent`, `definition` and writes
+   `Labeled_variables.with_llm_short_definition.xlsx` by adding **`llm_short_definition`**.
 
-1. **Baseline (No enrichment)**  
-   - Input = `name` only, or `name + original definition` (when available).  
-   - Model: `all-MiniLM-L6-v2` baseline.  
+* Produces **exactly one** concise sentence by default.
+* If the original is long, it allows **up to two short sentences** to keep signal.
 
-2. **LLM Enrichment**  
-   - Input = `name + definition_enriched` (LLM-generated).  
-   - Synonyms included where available.  
-   - Model: general semantic search models like `multi-qa-mpnet-base-dot-v1`.  
+2. **Predicts the best parent** for each variable
+   Uses **`name` + `llm_short_definition`** (falls back to `definition` or just `name`).
 
-3. **LLM + GECKO Mapping**  
-   - Add GECKO label/definition for parents (based on manual `TRUE` matches).  
-   - Training embeddings use GECKO; query embeddings may exclude it (to simulate real-world usage).  
+* Returns **Top-1** and **Top-3** suggestions.
+* Can include a **self-score (0–100)** and a **two-sentence rationale** per suggestion.
+* Supports a quick **`test N`** command to measure **Top-1 / Top-3 accuracy**.
 
-4. **Extended Definitions (Longer LLM enrichment)**  
-   - LLM prompted to generate longer, more detailed definitions.  
-   - Idea: give embedding models more semantic signal.  
+Everything runs **locally** via an **OpenAI-compatible** HTTP endpoint (no data leaves your machine).
 
 ---
 
-## 🔬 Models Evaluated
+## Why Top-1 and Top-3?
 
-We compared multiple embedding models:
-
-### General-purpose Language Models
-- `thenlper/gte-large`
-- `multi-qa-mpnet-base-dot-v1`
-- `sentence-t5-base`
-
-### Biomedical / Domain Models
-- `allenai/specter`
-- `biobert-base-cased-v1.1`
-- (optional future: `microsoft/BiomedNLP-PubMedBERT`)
+* **Top-1** is what you’d auto-apply if you accept the model’s first choice.
+* **Top-3** is practical for **triage/review**: if the gold label appears in the top three, a human can quickly click the right one. This reduces correction time and gives a better sense of usefulness in noisy taxonomies.
 
 ---
 
-## 📊 Results
+## Quickstart
 
-### LOOCV Accuracy (Top-1 / Top-3)
+```bash
+# 1) Create and activate a virtual environment (Python 3.9+)
+python -m venv .venv
+source .venv/bin/activate
 
-| Strategy                    | Model                     | Top-1  | Top-3  | Notes |
-|------------------------------|---------------------------|--------|--------|-------|
-| Baseline (no enrichment)     | all-MiniLM-L6-v2          | 0.xxx  | 0.xxx  | Short input only |
-| LLM Enrichment               | multi-qa-mpnet-base-dot-v1| 0.720  | 0.861  | Big boost with enriched defs |
-| LLM Enrichment               | sentence-t5-base          | 0.718  | 0.857  | Similar to mpnet |
-| LLM + GECKO (query=with GECKO) | thenlper/gte-large      | 0.774  | 0.896  | Best so far |
-| LLM + GECKO (query=no GECKO) | thenlper/gte-large        | 0.769  | 0.886  | Robust even w/out GECKO |
+# 2) Install deps
+pip install pandas openpyxl requests
 
-👉 **Takeaway:**  
-- Enrichment consistently improves accuracy.  
-- GECKO adds further boost, but results hold up even when GECKO isn’t available at query time.  
+# 3) Start your local model server (see next section)
 
----
+# 4) Generate short definitions (interactive; writes a new Excel)
+python interactive_compact_defs_all_v2.py
 
-## 📉 Error Analysis
-
-- **Confusions** often occur between semantically close parents (e.g., *Pregnancy history* vs. *Pregnancy outcomes*).  
-- **Synonyms help** disambiguate similar categories.  
-- **GECKO helps** by aligning with ontology structure.  
-
-Future work:  
-- per-parent accuracy tables,  
-- confusion matrix visualization.  
+# 5) Predict parents / evaluate (interactive; reads the new Excel)
+python predict_parent_interactive.py
+```
 
 ---
 
-## ⚙️ Reproducing the Results
+## Run the model locally (llama.cpp)
 
-1. **Enrich definitions & synonyms**
-   ```bash
-   python enrich_llm_defs.py
+You’ll run a **quantized** Qwen Instruct model locally and expose it via an OpenAI-style API.
+
+### Quick CLI sanity check
+
+Verify the model loads:
+
+```bash
+# User's example (quantized Qwen 3 4B Instruct)
+./llama-cli -m ~/Downloads/Qwen3-4B-Instruct-2507-Q4_K_M.gguf
+```
+
+### Start the HTTP server
+
+Run `llama-server` so the Python tools can POST to `http://127.0.0.1:8080`:
+
+```bash
+./llama-server \
+  -m ~/Downloads/Qwen3-4B-Instruct-2507-Q4_K_M.gguf \
+  --port 8080 --host 127.0.0.1
+```
+
+> The scripts try both `/v1/chat/completions` and `/chat/completions` automatically.
+> If you use another OpenAI-compatible host (e.g., LM Studio), just keep the same base URL.
+
+---
+
+## Scripts & usage
+
+### A) Create compact definitions
+
+**File:** `interactive_compact_defs_all_v2.py`
+**Reads:** `Labeled_variables.xlsx`
+**Writes:** `Labeled_variables.with_llm_short_definition.xlsx` (adds `llm_short_definition` next to `definition`)
+
+**Run**
+
+```bash
+python interactive_compact_defs_all_v2.py
+```
+
+**Interactive commands**
+
+* Type a row number (1-based) or comma-separated (e.g., `1, 2, 16`) to preview a compact definition for those rows.
+* Type `all` to generate **`llm_short_definition`** for every row and save a new Excel.
+* Type `r` to reload the file, `q` to quit.
+
+**Behavior**
+
+* One concise sentence (~10–22 words).
+* If the original `definition` is long (>300 chars), the model may produce **two** short sentences.
+* Extremely long inputs are **soft-truncated** in the prompt to avoid server `400` errors.
+
+---
+
+### B) Predict parents, explain, and evaluate
+
+**File:** `predict_parent_interactive.py`
+**Reads:** `Labeled_variables.with_llm_short_definition.xlsx`
+
+**Run**
+
+```bash
+python predict_parent_interactive.py
+```
+
+**Interactive commands**
+
+* `predict N` or `predict 1,2,16` — show **Top-1** + **Top-3** predictions.
+
+  * If `llm_short_definition` is missing for that row, the script **generates** one on the fly for context (not saved).
+* `test N [seed S]` — sample *N* random rows and compute **Top-1 / Top-3** accuracy.
+
+  * Uses a fixed seed by default for reproducibility (change with `seed S`).
+* `options` — print the full, numbered list of unique parent labels the model sees.
+* `r` — reload the Excel, `q` — quit.
+
+**Sample output (abridged)**
+
+```
+Row: 1
+name                 : Pregnancy number
+parent (original)    : Identifiers
+definition (original):
+Pregnancy number
+------------------------------------------------------------
+llm_short_definition (from sheet or generated now):
+Number of pregnancies recorded for the subject.
+------------------------------------------------------------
+[using llm_short_definition for prediction]
+
+PREDICTED parent (top-1): Birth, pregnancy and reproductive health history
+mode                    : json   similarity≈1.00
+confidence              : 72/100 (model self-score)
+------------------------------------------------------------
+TOP-3 suggestions:
+1. Birth, pregnancy and reproductive health history  [score: 72/100 | sim≈1.00]
+    why: Tracks parity for obstetric context. Strong semantic overlap with reproductive history.
+2. Identifiers                                      [score: 18/100 | sim≈0.84]
+    why: Sometimes stored as a code-like field. Less semantic fit than reproductive history.
+3. Demographics                                     [score: 10/100 | sim≈0.81]
+    why: Could be reported with person attributes. Not primarily a demographic measure.
+```
+
+> **Notes**
+>
+> * *similarity* is a string-match quality vs. your exact option list (not a probability).
+> * *confidence* is the model’s **self-score** (0–100), normalized to sum ~100 across Top-3. Treat as heuristic.
+
+---
+
+## Input/Output formats
+
+### Input (required)
+
+`Labeled_variables.xlsx` with columns (case-insensitive):
+
+* `name` *(string)*
+* `parent` *(string; your current taxonomy label; used as “gold” in testing)*
+* `definition` *(string; may be long)*
+
+### Output (after step A)
+
+`Labeled_variables.with_llm_short_definition.xlsx` adds:
+
+* `llm_short_definition` *(string; the compact definition)*
+
+The predictor reads this file by default.
+
+---
+
+## How it works (under the hood)
+
+* **Definition generation**:
+  Uses a strict instruction style (no lists, no marketing language) to produce one compact sentence; for long inputs, up to two short sentences. Long enumerations are truncated in prompt to avoid HTTP 400.
+
+* **Parent classification**:
+  Builds a prompt with **all unique `parent` options** from your data. Prefers `llm_short_definition` as context; falls back gracefully to `definition` or `name`.
+
+* **Top-3 JSON with rationale (preferred)**:
+  Asks the model to return **strict JSON**:
+
+  ```json
+  { "choices": [
+    {"label": "<exact option>", "score": 0..100, "why": "<exactly two short sentences>"},
+    ...
+  ]}
+  ```
+
+  If JSON parsing fails, the script falls back to “labels” or “numbered indices”.
+
+* **Accuracy**:
+
+  * **Top-1**: first suggestion equals the gold `parent`.
+  * **Top-3**: gold appears among the first 3 suggestions.
+
+---
+
+## Configuration knobs
+
+Open the script and adjust:
+
+* `BASE_URL` — default `http://127.0.0.1:8080`
+* `MODEL` — e.g., `"gwen-instruct"` (or whatever your server exposes)
+* `PROMPT_DEF_CHAR_LIMIT` — max definition chars passed to the model (default `1200`)
+* `LONG_DEF_CHAR_THRESHOLD` — above this, allow **two** short sentences (default `300`)
+* `MAX_TOK_OUT` — output token cap; increase if JSON gets cut off (default `256`)
+* `TEST_SEED` — seed for `test N` (default `42`)
+
+---
+
+## Troubleshooting
+
+* **`400 Bad Request` on chat/completions**
+  Prompt too large. The scripts **truncate** long definitions; if this still happens, reduce `PROMPT_DEF_CHAR_LIMIT`.
+
+* **LibreSSL / urllib3 warning on macOS**
+  It’s just a warning. If you want to hide it:
+
+  * Pin urllib3 `<2`: `pip install "urllib3<2"`; or
+  * Use a newer Python (e.g., 3.12 via Homebrew) and recreate the venv.
+
+* **Server route differences**
+  Tools try `/v1/chat/completions` and `/chat/completions`. If you use a different API (e.g., Ollama’s `/api/chat`), adapt `post_chat` accordingly.
+
+* **Model outputs indices (e.g., `68`)**
+  That’s **numbered mode**. The script maps indices back to labels; type `options` to see the numbering.
+
+---
+
+## Results & analysis templates
+
+### 🔢 Accuracy summary (paste from `test N`)
+
+| Sample Size | Evaluated | Skipped (no gold) | Failures | Top-1 Accuracy | Top-3 Accuracy | Seed |
+| ----------: | --------: | ----------------: | -------: | -------------: | -------------: | ---: |
+|          50 |        47 |                 2 |        1 |         74.47% |         89.36% |   42 |
+
+### 🧭 Confusion examples (fill with interesting errors)
+
+| Row | Name           | Gold Parent           | Top-1 Pred    | In Top-3? | Notes                                                 |
+| --: | -------------- | --------------------- | ------------- | :-------: | ----------------------------------------------------- |
+| 151 | Child’s height | Physical & cognitive… | Preschool age |     ✅     | Short def mentions age; model overweights life stage. |
+|   … | …              | …                     | …             |     …     | …                                                     |
+
+### 📋 Rationale audit (spot-check the “why” sentences)
+
+| Row | Predicted Label             | Score | Why (two sentences)                                                       | Useful? |
+| --: | --------------------------- | ----: | ------------------------------------------------------------------------- | :-----: |
+|   1 | Reproductive health history |    72 | Tracks parity; matches obstetric context. Clear overlap with input terms. |    ✅    |
+|   … | …                           |     … | …                                                                         |    …    |
+
+---
+
+## FAQ
+
+**Q: Which models work best?**
+A: For speed and privacy, a **quantized 3–7B Instruct** model (e.g., Qwen, Llama-3-Instruct, Mistral-Instruct) is a good start. Larger models generally improve accuracy but require more RAM.
+
+**Q: Are the “confidence” scores probabilities?**
+A: No. They’re **model self-scores** (0–100), normalized across the Top-3. Use them as a heuristic with human review.
+
+**Q: Can I save the on-the-fly generated short definition?**
+A: In the predictor we only generate for context/display. If you want to persist them back to Excel, that can be added.
+
+**Q: Can I export predictions to a file?**
+A: Yes with a small change — e.g., add columns `pred_parent_top1/2/3`, `pred_score_top1/2/3`, `pred_why_top1/2/3`. Open an issue or adapt the script.
+
+---
+
+## License
+
+MIT (or your preferred license). Add a `LICENSE` file if you plan to share publicly.
+
+---
+
+### Repo layout (suggested)
+
+```
+.
+├── README.md
+├── interactive_compact_defs_all_v2.py
+└── predict_parent_interactive.py
+```
+
+That’s it — copy this README into `README.md` and you’re ready to go.
