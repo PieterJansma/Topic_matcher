@@ -269,21 +269,28 @@ Open the script and adjust:
 
 | Sample Size | Evaluated | Skipped (no gold) | Failures | Top-1 Accuracy | Top-3 Accuracy | Seed |
 | ----------: | --------: | ----------------: | -------: | -------------: | -------------: | ---: |
-|          50 |        47 |                 2 |        1 |         74.47% |         89.36% |   42 |
+|          30 |        27 |                 3 |        0 |         48.15.47% |         70.37% |   42 |
 
-### 🧭 Confusion examples (fill with interesting errors)
+### Examples of when model is right
 
-| Row | Name           | Gold Parent           | Top-1 Pred    | In Top-3? | Notes                                                 |
-| --: | -------------- | --------------------- | ------------- | :-------: | ----------------------------------------------------- |
-| 151 | Child’s height | Physical & cognitive… | Preschool age |     ✅     | Short def mentions age; model overweights life stage. |
-|   … | …              | …                     | …             |     …     | …                                                     |
+| Row | Name                                             | Gold Parent                    | Top-1 Pred                        | Score | Why (two sentences)                                                                                                                                                                                                          |
+| --: | ------------------------------------------------ | ------------------------------ | --------------------------------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  56 | Other and unspecified non-pharmacological inter… | Non-ph…                        | Non-pharmacological interventions |    95 | The name directly refers to interventions that do not use medication. This category best groups behavioral and supportive strategies, making it the most specific and relevant parent category for this entry.               |
+| 484 | ndvi100                                          | Natural spaces                 | Natural spaces                    |    87 | The definition specifies ‘natural’ areas such as parks, forests, and green spaces. These locations are prototypical contexts for exposure studies and align with ecological and environmental contexts within natural areas. |
+|  64 | Any eating disorder                              | Maternal psychiatric disorders | Maternal psychiatric disorders    |    86 | Eating disorders are classified as psychiatric conditions. When occurring in mothers, they are studied within maternal mental health across the lifespan, which falls under maternal psychiatric disorders.                  |
+| 421 | main_land_use_agricultural                       | Built environment/neighbour…   | Built environment/neighbourhood   |    85 | The definition involves neighbourhood form and land use factors. These are classic built-environment attributes that shape how land use patterns influence residential environments.                                         |
+| 269 | Nutrients (M)                                    | Nutrition                      | Nutrition                         |    68 | The definition explicitly mentions key aspects of dietary intake and nutrient quality. That scope directly aligns with the core focus of nutrition as a domain.                                                              |
 
-### 📋 Rationale audit (spot-check the “why” sentences)
 
-| Row | Predicted Label             | Score | Why (two sentences)                                                       | Useful? |
-| --: | --------------------------- | ----: | ------------------------------------------------------------------------- | :-----: |
-|   1 | Reproductive health history |    72 | Tracks parity; matches obstetric context. Clear overlap with input terms. |    ✅    |
-|   … | …                           |     … | …                                                                         |    …    |
+### Examples of where model is wrong.
+
+| Row | Name                                  | Gold Parent                                | Top-1 Pred                        | In Top-3? | Score | Why (two sentences)                                                                                                                                                                                                   |
+| --: | ------------------------------------- | ------------------------------------------ | --------------------------------- | :-------: | ----: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 230 | Sibling position                      | Birth outcomes                             | Family and household structure    |     ✅     |    86 | Sibling position directly reflects ordinal birth order within the family unit. This is inherently a structural aspect of family dynamics and birth order within a household.                                          |
+| 285 | Use of assistive devices              | Perception of health, quality…             | Non-pharmacological interventions |     ❌     |    85 | The use of assistive devices is part of supportive care and rehabilitation strategies. These are typically grouped under non-pharmacological strategies for maintaining daily function.                               |
+| 408 | Death of child                        | Vital status                               | Death                             |     ✅     |    68 | The name ‘Death of child’ directly aligns with mortality outcomes. Death is the appropriate high-level category for mortality indicators in vital status classification.                                              |
+| 487 | Traffic                               | Other physical environment characteristics | Traffic                           |     ❌     |    44 | The name and definition directly describe road traffic and related exposure. Traffic is a canonical subtopic of the physical environment; however, it may sit under a more specific subcategory in the gold taxonomy. |
+| 132 | Preeclampsia/gestational hypertension | Pregnancy, delivery and birth              | Diseases                          |     ❌     |    44 | Preeclampsia is a pregnancy-specific disease entity with established diagnostic criteria. The model maps to the broader ‘Diseases’ category rather than the narrower pregnancy context used in the gold label.        |
 
 ---
 
